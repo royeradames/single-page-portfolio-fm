@@ -1,0 +1,17 @@
+node_modules/
+.next/
+out/
+.vercel/
+.env*
+!.env.example
+*.tsbuildinfo
+playwright-report/
+test-results/
+screenshots/
+
+# Frontend Mentor: keep design files out of the repository
+*.sketch
+*.fig
+*.xd
+
+.DS_Store
