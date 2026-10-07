@@ -1,0 +1,290 @@
+@import "tailwindcss";
+
+/*
+  Geometry comes from the Figma frames (375 mobile, 768 tablet, 1440 desktop).
+  Decoration offsets are measured from each section's content box, so they stay
+  attached to the content when the viewport is wider or narrower than the frame.
+*/
+:root {
+  color-scheme: dark;
+  --black: #151515;
+  --dark: #242424;
+  --grey: #d9d9d9;
+  --green: #4ee1a0;
+  --red: #ff6f5b;
+  --white: #fff;
+  --gutter: 1rem;
+  --content: 69.375rem; /* 1110px */
+  --icon-scale: 0.8;
+}
+
+* { box-sizing: border-box; }
+html { font-size: 100%; }
+body {
+  margin: 0;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration: none; }
+button, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--green); outline-offset: 4px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+.page { position: relative; overflow-x: clip; }
+.container { position: relative; width: min(100% - 2 * var(--gutter), var(--content)); margin-inline: auto; }
+
+/* Decorations */
+.rings, .circle { position: absolute; pointer-events: none; }
+.rings { width: 530px; max-width: none; height: auto; }
+.circle { width: 129px; height: 129px; border: 1px solid var(--white); border-radius: 50%; }
+
+/* Text links styled as the design's underlined buttons */
+.text-button {
+  display: inline-block;
+  padding: 0 0 0.625rem;
+  border: 0;
+  border-bottom: 2px solid var(--green);
+  background: none;
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.625rem;
+  letter-spacing: 0.143em; /* 2.29px */
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.text-button:hover { color: var(--green); }
+
+/* Logo and social links */
+.logo { font-size: 1.5rem; font-weight: 700; line-height: 2rem; letter-spacing: -0.33px; }
+.socials { display: flex; align-items: center; gap: 2px; }
+.socials a {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: var(--white);
+}
+.socials a:hover { color: var(--green); }
+.socials a:focus-visible { outline-offset: 0; }
+.socials svg { width: calc(var(--w) * var(--icon-scale)); height: auto; }
+
+/* Header sits over the hero photo */
+.site-header {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1.25rem;
+}
+.site-header .socials { margin-top: 0.5rem; }
+
+/* Hero */
+.hero { position: relative; }
+.hero-photo { display: block; width: 174px; margin-inline: auto; }
+.hero-photo img { width: 100%; height: auto; }
+.hero-rings { left: -358px; top: 124px; }
+.hero-circle { right: calc(-64.5px - var(--gutter)); top: 254px; }
+.hero-copy { position: relative; display: flex; flex-direction: column; align-items: center; margin-top: 2.5rem; text-align: center; }
+.hero h1 {
+  position: relative;
+  z-index: 1;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 2.5rem;
+  letter-spacing: -1.14px;
+}
+.hero h1 br { display: none; }
+.hero h1 br.break-greeting { display: inline; }
+.hero-name { position: relative; display: inline-block; }
+.hero-name::after {
+  content: "";
+  position: absolute;
+  inset: 100% 0 auto;
+  z-index: -1;
+  height: 4px;
+  background: var(--green);
+}
+.hero-intro { margin-top: 1.5rem; color: var(--grey); font-size: 1rem; line-height: 1.625rem; }
+.hero .text-button { margin-top: 1.5rem; }
+
+/* Skills */
+.skills { margin-top: 5rem; padding-block: 2.5rem; border-block: 1px solid var(--white); }
+.skills-rings { left: 173px; top: 540px; }
+.skill-list { position: relative; display: grid; gap: 1.5rem; text-align: center; }
+.skill-list h3 { font-size: 2rem; font-weight: 700; line-height: 2.5rem; letter-spacing: -1px; }
+.skill-list p { margin-top: 1px; color: var(--grey); font-size: 1rem; line-height: 1.625rem; }
+
+/* Projects */
+.projects { margin-top: 5rem; }
+.section-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.section-title { font-size: 2.5rem; font-weight: 700; line-height: 2.5rem; letter-spacing: -1.14px; }
+.project-list { display: grid; gap: 2.5rem; margin-top: 2.5rem; }
+.project { position: relative; }
+.project-image { width: 100%; aspect-ratio: 343 / 253; object-fit: cover; }
+.project h3 { margin-top: 1.25rem; font-size: 1.5rem; font-weight: 700; line-height: 2rem; text-transform: uppercase; }
+.project-tags { display: flex; flex-wrap: wrap; column-gap: 1.125rem; margin-top: 0.4375rem; color: var(--grey); font-size: 1.125rem; line-height: 1.75rem; text-transform: uppercase; }
+.project-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.875rem; margin-top: 1.25rem; }
+
+/* Contact and footer share the dark band */
+.contact-band { margin-top: 5rem; background: var(--dark); }
+.contact-band-footer { display: flow-root; background: var(--dark); }
+.contact { padding-top: 3.75rem; }
+.contact-rings { left: -359px; top: 436px; }
+.contact-intro { position: relative; text-align: center; }
+.contact-intro p { margin-top: 1.25rem; color: var(--grey); font-size: 1rem; line-height: 1.625rem; }
+.contact-form { position: relative; display: grid; margin-top: 3.125rem; }
+.field { position: relative; }
+.field + .field { margin-top: 0.6875rem; }
+.field input,
+.field textarea {
+  display: block;
+  width: 100%;
+  padding: 0 1.5rem 1rem;
+  border: 0;
+  border-bottom: 1px solid var(--white);
+  border-radius: 0;
+  background: transparent;
+  color: var(--white);
+  font-size: 1rem;
+  line-height: 1.625rem;
+  letter-spacing: -0.22px;
+  outline: none;
+}
+.field textarea { height: 6.6875rem; resize: none; }
+.field input::placeholder,
+.field textarea::placeholder { color: var(--white); opacity: 0.5; text-transform: uppercase; }
+.field input:focus-visible,
+.field textarea:focus-visible { border-bottom-color: var(--green); box-shadow: 0 1px 0 var(--green); }
+.field[data-invalid] input,
+.field[data-invalid] textarea { padding-right: 3.5rem; border-bottom-color: var(--red); }
+.field[data-invalid] input:focus-visible,
+.field[data-invalid] textarea:focus-visible { box-shadow: 0 1px 0 var(--red); }
+.field-icon { position: absolute; top: 0; right: 0; width: 24px; height: 24px; color: var(--red); }
+.field-error {
+  min-height: 1rem;
+  margin-top: 0.3125rem;
+  color: var(--red);
+  font-size: 0.75rem; /* 12px, as designed for inline errors */
+  line-height: 1rem;
+  letter-spacing: -0.17px;
+  text-align: right;
+}
+.form-actions { display: flex; justify-content: flex-end; margin-top: 0.6875rem; }
+.form-status:not(:empty) { margin-top: 1.5rem; padding-left: 1rem; border-left: 2px solid var(--green); color: var(--grey); font-size: 1rem; line-height: 1.625rem; }
+.demo-note { display: none; margin-top: 1.5rem; padding-left: 1rem; border-left: 2px solid var(--green); color: var(--grey); font-size: 1rem; line-height: 1.625rem; }
+.demo-note:target { display: block; }
+
+.site-footer { display: flex; flex-direction: column; align-items: center; margin-top: 5.4375rem; padding: 2.4375rem 0 3rem; border-top: 1px solid var(--white); }
+.site-footer .socials { margin-top: 0.5rem; }
+
+/* Tablet: 768px frame */
+@media (min-width: 48rem) {
+  :root { --gutter: 2rem; --icon-scale: 1; }
+  .site-header { flex-direction: row; justify-content: space-between; padding-top: 1.4375rem; }
+  .site-header .socials, .site-footer .socials { margin-top: 0; gap: 0.75rem; margin-right: -0.625rem; }
+  .logo { font-size: 2rem; letter-spacing: -0.44px; }
+
+  .hero { min-height: 600px; }
+  .hero-photo { position: absolute; top: 0; right: calc(-1 * var(--gutter)); width: 322px; margin: 0; }
+  .hero-rings { left: -297px; top: 86px; }
+  .hero-circle { top: 471px; }
+  .hero-copy { align-items: flex-start; margin-top: 0; padding-top: 9.4375rem; text-align: left; }
+  .hero h1 { max-width: 28.75rem; font-size: 4.5rem; line-height: 4.5rem; letter-spacing: -2.05px; }
+  .hero h1 br.break-tablet { display: inline; }
+  .hero h1 br.break-greeting { display: none; }
+  .hero-name::after { height: 6px; }
+  /* The tablet frame drops its last heading line 11px; keep the copy below it where the design puts it */
+  .hero-intro { max-width: 27.8125rem; margin-top: 4.8125rem; font-size: 1.125rem; line-height: 1.75rem; }
+  .hero .text-button { margin-top: 2.125rem; }
+
+  .skills { margin-top: 3.75rem; padding: 3.25rem 0 0; border-bottom: 0; }
+  .skills-rings { left: 538px; top: 387px; }
+  .skill-list { grid-template-columns: repeat(2, 1fr); gap: 3.25rem 0; text-align: left; }
+  .skill-list h3 { font-size: 3rem; line-height: 3.5rem; letter-spacing: -1.5px; }
+  .skill-list p { margin-top: 0.875rem; font-size: 1.125rem; line-height: 1.75rem; }
+
+  .projects { margin-top: 6.25rem; }
+  .section-title { font-size: 4.5rem; line-height: 4.5rem; letter-spacing: -2.05px; }
+  .project-list { grid-template-columns: repeat(2, 1fr); gap: 3.75rem 1.5rem; margin-top: 3.75rem; }
+
+  .contact-band { margin-top: 6.25rem; }
+  .contact-rings { left: -400px; top: 547px; }
+  .contact-intro, .contact-form { width: min(100%, 27.8125rem); margin-inline: auto; }
+  .contact-intro .section-title { text-align: center; }
+  .contact-intro p { font-size: 1.125rem; line-height: 1.75rem; }
+  .contact-form { margin-top: 3rem; }
+
+  .site-footer { flex-direction: row; justify-content: space-between; margin-top: 5.75rem; padding: 1.5rem 0 2.125rem; }
+}
+
+/* Desktop: 1440px frame; the content box is 1110px from 1200px up */
+@media (min-width: 75rem) {
+  .site-header { padding-top: 2.0625rem; }
+  .site-header .socials { margin-right: 1.25rem; }
+
+  .hero { min-height: 720px; }
+  .hero-photo { right: 0; width: 445px; }
+  .hero-rings { left: -265px; top: 133px; }
+  .hero-circle { right: 380.5px; top: 521px; }
+  .hero-copy { padding-top: 12.375rem; }
+  .hero h1 { max-width: none; font-size: 5.5rem; line-height: 5.5rem; letter-spacing: -2.5px; }
+  .hero h1 br.break-tablet { display: none; }
+  .hero h1 br.break-greeting { display: inline; }
+  .hero-intro { margin-top: 2.6875rem; }
+  .hero .text-button { margin-top: 4.125rem; }
+
+  .skills { margin-top: 6.5rem; padding-top: 4.5rem; }
+  .skills-rings { left: 984px; top: 253px; }
+  .skill-list { grid-template-columns: 375px 380px 1fr; gap: 3.625rem 0; padding-left: 5px; }
+
+  .projects { margin-top: 8.75rem; }
+  .section-title { font-size: 5.5rem; line-height: 5.5rem; letter-spacing: -2.5px; }
+  .project-list { gap: 4.3125rem 1.875rem; margin-top: 5rem; }
+  .project-image { aspect-ratio: 540 / 400; }
+
+  .contact-band { margin-top: 8.6875rem; }
+  .contact { display: grid; grid-template-columns: 27.8125rem 27.8125rem; justify-content: space-between; align-items: start; padding-top: 5.25rem; }
+  .contact-rings { left: -370px; top: 327px; }
+  .contact-intro, .contact-form { width: auto; margin: 0; }
+  .contact-intro { text-align: left; }
+  .contact-intro .section-title { text-align: left; }
+  .contact-intro p { margin-top: 2.25rem; }
+
+  .site-footer { margin-top: 5.75rem; padding: 2.5625rem 0 5.375rem; }
+}
+
+/* Desktop pointers reveal project links over the screenshot on hover or focus */
+@media (min-width: 75rem) and (hover: hover) and (pointer: fine) {
+  .project-links {
+    position: absolute;
+    inset: 0 0 auto;
+    aspect-ratio: 540 / 400;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    margin: 0;
+    background: rgb(0 0 0 / 0.75);
+    opacity: 0;
+  }
+  .project:hover .project-links,
+  .project-links:focus-within { opacity: 1; }
+}
+@media (min-width: 75rem) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .project-links { transition: opacity 0.2s ease; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .text-button, .socials a { transition: color 0.2s ease; }
+}
