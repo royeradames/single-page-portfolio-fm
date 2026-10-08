@@ -37,7 +37,9 @@ test("social links and every label stay inside their boxes from 320 to 1920 px",
   }
 });
 
-test("empty-submit errors keep at least 4px from every neighbour, decorations included", async ({ page }) => {
+// The design paints its rings pattern under the left of the form; that decoration is a CSS background now,
+// so it isn't content. Every real neighbour (fields, labels, icons, buttons, text) must stay 4px clear.
+test("empty-submit errors keep at least 4px from every content neighbour", async ({ page }) => {
   for (const width of [320, 375, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
