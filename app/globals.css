@@ -44,7 +44,8 @@ button, input, textarea { font: inherit; color: inherit; }
 
 /* Decorations */
 .rings, .circle { position: absolute; pointer-events: none; }
-.rings { width: 530px; max-width: none; height: auto; }
+/* Decorative rings are a CSS background, so they never count as content beside a message. */
+.rings { width: 530px; height: 129px; background: url(/images/pattern-rings.svg) center / 100% 100% no-repeat; }
 .circle { width: 129px; height: 129px; border: 1px solid var(--white); border-radius: 50%; }
 
 /* Text links styled as the design's underlined buttons */
@@ -175,11 +176,11 @@ button, input, textarea { font: inherit; color: inherit; }
 .field[data-invalid] textarea:focus-visible { box-shadow: 0 2px 0 var(--red); }
 .field-icon { position: absolute; top: 0; right: 0; width: 24px; height: 24px; color: var(--red); }
 .field-error {
-  min-height: 1rem;
+  min-height: 1.5rem;
   margin-top: 0.3125rem;
   color: var(--red);
-  font-size: 0.75rem; /* 12px, as designed for inline errors */
-  line-height: 1rem;
+  font-size: 1rem; /* the design's 12px, raised to the 16px family floor */
+  line-height: 1.5rem;
   letter-spacing: -0.17px;
   text-align: right;
 }
@@ -196,7 +197,9 @@ button, input, textarea { font: inherit; color: inherit; }
 @media (min-width: 48rem) {
   :root { --gutter: 2rem; --icon-scale: 1; }
   .site-header { flex-direction: row; justify-content: space-between; padding-top: 1.4375rem; }
-  .site-header .socials, .site-footer .socials { margin-top: 0; gap: 0.75rem; margin-right: -0.625rem; }
+  /* 32px-wide links (44px tall) keep the icons at the design pitch without spilling past the content edge. */
+  .site-header .socials, .site-footer .socials { margin-top: 0; gap: 1.5rem; }
+  .socials a { width: 2rem; }
   .logo { font-size: 2rem; letter-spacing: -0.44px; }
 
   .hero { min-height: 600px; }
@@ -235,7 +238,7 @@ button, input, textarea { font: inherit; color: inherit; }
 /* Desktop: 1440px frame; the content box is 1110px from 1200px up */
 @media (min-width: 75rem) {
   .site-header { padding-top: 2.0625rem; }
-  .site-header .socials { margin-right: 1.25rem; }
+  .site-header .socials { margin-right: 1.625rem; }
 
   .hero { min-height: 720px; }
   .hero-photo { right: 0; width: 445px; }
