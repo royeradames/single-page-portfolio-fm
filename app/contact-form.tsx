@@ -53,6 +53,7 @@ export function ContactForm() {
       className="contact-form"
       action="?#contact-demo-note"
       aria-label="Contact Adam"
+      aria-describedby="contact-demo-note"
       onSubmit={(event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -107,9 +108,6 @@ export function ContactForm() {
       </div>
       <p className="form-status" role="status">
         {sentTo === null ? "" : `Thanks, ${sentTo}. This is a demo form, so your message was not sent or stored.`}
-      </p>
-      <p className="demo-note" id="contact-demo-note">
-        This is a demo form, so your message was not sent or stored.
       </p>
     </form>
   );

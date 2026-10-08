@@ -3,6 +3,9 @@ import { expect, test, type Page } from "@playwright/test";
 const REQUIRED = "Sorry, this field is required";
 const INVALID_EMAIL = "Sorry, invalid format here";
 const DEMO_NOTICE = "This is a demo form, so your message was not sent or stored.";
+const UPFRONT_NOTICE = "Demo form: nothing you enter is sent or stored.";
+const SITE_NAME = "adamkeyes";
+const SITE_URL = "https://single-page-portfolio-fm.royeradames.com";
 const RED = "rgb(255, 111, 91)";
 const GREEN = "rgb(78, 225, 160)";
 
@@ -48,6 +51,32 @@ test("renders the designed content, metadata and icons", async ({ page, request 
   const images = await page.locator("img").evaluateAll((elements) =>
     elements.map((element) => ({ src: (element as HTMLImageElement).currentSrc, alt: element.getAttribute("alt") })));
   expect(images.filter((image) => image.alt === null)).toEqual([]);
+});
+
+for (const width of [400, 768, 1440]) {
+  test(`the demo notice is visible near the form before anyone types at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    const notice = page.locator("#contact").getByText(UPFRONT_NOTICE, { exact: true });
+    await expect(notice).toBeVisible();
+    await expect(contactForm(page).name).toHaveValue("");
+    const noticeBox = (await notice.boundingBox())!;
+    const sendBox = (await contactForm(page).send.boundingBox())!;
+    // It is read before the visitor reaches the send button.
+    expect(noticeBox.y).toBeLessThan(sendBox.y);
+    expect(parseFloat(await notice.evaluate((element) => getComputedStyle(element).fontSize))).toBeGreaterThanOrEqual(16);
+  });
+}
+
+test("the home page declares one site name for search", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator(".site-header .logo")).toHaveText(SITE_NAME);
+  await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute("content", SITE_NAME);
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", SITE_URL);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", SITE_URL);
+  const blocks = await page.locator('script[type="application/ld+json"]').allTextContents();
+  const websites = blocks.map((text) => JSON.parse(text)).filter((data) => data["@type"] === "WebSite");
+  expect(websites).toEqual([{ "@context": "https://schema.org", "@type": "WebSite", name: SITE_NAME, url: SITE_URL }]);
 });
 
 test.describe("desktop project links", () => {
@@ -406,7 +435,7 @@ test.describe("without JavaScript", () => {
     await expect(page).toHaveURL(/\/\?#contact-demo-note$/);
     expect(page.url()).not.toContain("Fredrick");
     await expect(page.locator("#contact-demo-note")).toBeVisible();
-    await expect(page.locator("#contact-demo-note")).toHaveText(DEMO_NOTICE);
+    await expect(page.locator("#contact-demo-note")).toHaveText(UPFRONT_NOTICE);
     expect(writes).toEqual([]);
   });
 });

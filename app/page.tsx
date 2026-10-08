@@ -1,5 +1,8 @@
 import { ContactForm } from "./contact-form";
+import { siteName, siteUrl } from "./site";
 import { SocialLinks } from "./social-links";
+
+const websiteJsonLd = { "@context": "https://schema.org", "@type": "WebSite", name: siteName, url: siteUrl };
 
 const skills = [
   { name: "HTML", years: 4 },
@@ -60,8 +63,13 @@ function Rings({ className }: { className: string }) {
 export default function Home() {
   return (
     <div className="page">
+      <script
+        type="application/ld+json"
+        // Static JSON from constants; "<" is escaped so the payload cannot close the script tag.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd).replace(/</g, "\\u003c") }}
+      />
       <header className="site-header container">
-        <p className="logo">adamkeyes</p>
+        <p className="logo">{siteName}</p>
         <SocialLinks label="Social profiles" />
       </header>
 
@@ -142,6 +150,9 @@ export default function Home() {
               <p>
                 I would love to hear about your project and how I could help. Please fill in the form, and I’ll get back to you as soon as possible.
               </p>
+              <p className="demo-note" id="contact-demo-note">
+                <strong>Demo form:</strong> nothing you enter is sent or stored.
+              </p>
             </div>
             <ContactForm />
           </section>
@@ -150,7 +161,7 @@ export default function Home() {
 
       <footer className="contact-band-footer">
         <div className="site-footer container">
-          <p className="logo">adamkeyes</p>
+          <p className="logo">{siteName}</p>
           <SocialLinks label="Social profiles, footer" />
         </div>
       </footer>

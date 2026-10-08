@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { siteName, siteUrl } from "./site";
 
 const spaceGrotesk = localFont({
   src: "./fonts/SpaceGrotesk-VariableFont_wght.ttf",
@@ -9,10 +10,16 @@ const spaceGrotesk = localFont({
   weight: "300 700",
 });
 
+const title = "Single-page developer portfolio | Royer Adames";
+const description =
+  "Adam Keyes' sample front-end developer portfolio with skills, projects and a contact form, built for the Frontend Mentor challenge.";
+
 export const metadata: Metadata = {
-  title: "Single-page developer portfolio | Royer Adames",
-  description:
-    "Adam Keyes' sample front-end developer portfolio with skills, projects and a contact form, built for the Frontend Mentor challenge.",
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  alternates: { canonical: siteUrl },
+  openGraph: { type: "website", siteName, url: siteUrl, title, description, locale: "en" },
 };
 
 export const viewport: Viewport = { themeColor: "#151515" };

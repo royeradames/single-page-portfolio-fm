@@ -185,8 +185,9 @@ button, input, textarea { font: inherit; color: inherit; }
 }
 .form-actions { display: flex; justify-content: flex-end; margin-top: 0.6875rem; }
 .form-status:not(:empty) { margin-top: 1.5rem; padding-left: 1rem; border-left: 2px solid var(--green); color: var(--grey); font-size: 1rem; line-height: 1.625rem; }
-.demo-note { display: none; margin-top: 1.5rem; padding-left: 1rem; border-left: 2px solid var(--green); color: var(--grey); font-size: 1rem; line-height: 1.625rem; }
-.demo-note:target { display: block; }
+/* Shown up front: the form is a demo and sends nothing. */
+.contact-intro .demo-note { margin-top: 1.5rem; color: var(--grey); font-size: 1rem; line-height: 1.625rem; }
+.demo-note strong { color: var(--green); font-weight: 700; }
 
 .site-footer { display: flex; flex-direction: column; align-items: center; margin-top: 5.4375rem; padding: 2.4375rem 0 3rem; border-top: 1px solid var(--white); }
 .site-footer .socials { margin-top: 0.5rem; }
