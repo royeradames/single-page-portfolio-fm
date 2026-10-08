@@ -39,17 +39,16 @@ function ProfilePhoto() {
 
 function ProjectImage({ number, title }: { number: number; title: string }) {
   return (
-    <picture>
-      <source media="(min-width: 75rem)" srcSet={`/images/thumbnail-project-${number}-large.webp`} width={540} height={400} />
-      <img
-        className="project-image"
-        src={`/images/thumbnail-project-${number}-small.webp`}
-        alt={`${title} project preview`}
-        width={343}
-        height={253}
-        loading="lazy"
-      />
-    </picture>
+    <img
+      className="project-image"
+      src={`/images/thumbnail-project-${number}-small.webp`}
+      srcSet={`/images/thumbnail-project-${number}-small.webp 686w, /images/thumbnail-project-${number}-large.webp 1080w`}
+      sizes="(min-width: 75rem) 540px, (min-width: 48rem) calc((100vw - 5.5rem) / 2), calc(100vw - 2rem)"
+      alt={`${title} project preview`}
+      width={343}
+      height={253}
+      loading="lazy"
+    />
   );
 }
 
@@ -124,7 +123,7 @@ export default function Home() {
                     <a
                       className="text-button"
                       href={`https://github.com/search?q=${encodeURIComponent(`${project.title} frontend mentor`)}&type=repositories`}
-                      aria-label={`View code: ${project.title}`}
+                      aria-label={`View code: ${project.title} (GitHub search)`}
                     >
                       View code
                     </a>

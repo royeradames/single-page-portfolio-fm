@@ -58,7 +58,7 @@ test.describe("desktop project links", () => {
     const card = page.locator(".project").first();
     const links = card.locator(".project-links");
     const viewProject = card.getByRole("link", { name: "View project: Design portfolio" });
-    const viewCode = card.getByRole("link", { name: "View code: Design portfolio" });
+    const viewCode = card.getByRole("link", { name: "View code: Design portfolio (GitHub search)" });
     await card.scrollIntoViewIfNeeded();
     await expect(links).toHaveCSS("opacity", "0");
 
@@ -74,6 +74,11 @@ test.describe("desktop project links", () => {
     await expect(viewProject).toHaveCSS("color", GREEN);
 
     await page.mouse.move(5, 5);
+    await expect(links).toHaveCSS("opacity", "0");
+    // Only the screenshot reveals the links; the title and tags do not.
+    await card.getByRole("heading", { level: 3 }).hover();
+    await expect(links).toHaveCSS("opacity", "0");
+    await card.locator(".project-tags").hover();
     await expect(links).toHaveCSS("opacity", "0");
 
     await viewProject.focus();
@@ -95,25 +100,86 @@ test.describe("desktop project links", () => {
     const response = await request.get(projectHref!);
     expect(response.status()).toBe(200);
     expect(response.headers()["content-type"]).toContain("image/webp");
-    await expect(card.getByRole("link", { name: "View code: Memory game" })).toHaveAttribute(
+    await expect(card.getByRole("link", { name: "View code: Memory game (GitHub search)" })).toHaveAttribute(
       "href", "https://github.com/search?q=Memory%20game%20frontend%20mentor&type=repositories");
   });
+});
+
+async function expectLinksBelowEveryCard(page: Page) {
+  for (const card of await page.locator(".project").all()) {
+    const links = card.locator(".project-links");
+    await expect(links).toHaveCSS("opacity", "1");
+    await expect(links.getByRole("link")).toHaveCount(2);
+    const tags = (await card.locator(".project-tags").boundingBox())!;
+    const linkBox = (await links.boundingBox())!;
+    expect(linkBox.y).toBeGreaterThanOrEqual(tags.y + tags.height);
+  }
+}
+
+test.describe("touch screen at desktop width", () => {
+  test.use({ viewport: { width: 1440, height: 900 }, isMobile: true, hasTouch: true });
+
+  test("keeps project links visible below each card", async ({ page }) => {
+    await page.goto("/");
+    expect(await page.evaluate(() => matchMedia("(hover: hover) and (pointer: fine)").matches)).toBe(false);
+    await expectLinksBelowEveryCard(page);
+  });
+});
+
+test("the 1200px breakpoint switches from always-visible links to the hover overlay", async ({ page }) => {
+  await page.setViewportSize({ width: 1199, height: 900 });
+  await page.goto("/");
+  await expectLinksBelowEveryCard(page);
+  const columns = async () => page.locator(".project-list").evaluate((list) => getComputedStyle(list).gridTemplateColumns.split(" ").length);
+  expect(await columns()).toBe(2);
+  await page.setViewportSize({ width: 1200, height: 900 });
+  const card = page.locator(".project").first();
+  await expect(card.locator(".project-links")).toHaveCSS("opacity", "0");
+  await expect(card.locator(".project-links")).toHaveCSS("position", "absolute");
+  expect(await columns()).toBe(2);
+  await card.locator(".project-links").hover();
+  await expect(card.locator(".project-links")).toHaveCSS("opacity", "1");
+});
+
+test("form fields keep a focus ring in forced colours", async ({ page }) => {
+  await page.emulateMedia({ forcedColors: "active", reducedMotion: "reduce" });
+  await page.goto("/");
+  const { name, send } = contactForm(page);
+  await send.click();
+  await expect(name).toBeFocused();
+  await expect(name).toHaveCSS("outline-style", "solid");
+  await expect(name).toHaveCSS("outline-width", "2px");
+  const color = await name.evaluate((input) => getComputedStyle(input).outlineColor);
+  expect(color).not.toBe("rgba(0, 0, 0, 0)");
 });
 
 for (const width of [400, 768]) {
   test(`project links are always visible below each card at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
-    for (const card of await page.locator(".project").all()) {
-      const links = card.locator(".project-links");
-      await expect(links).toHaveCSS("opacity", "1");
-      await expect(links.getByRole("link")).toHaveCount(2);
-      const tags = (await card.locator(".project-tags").boundingBox())!;
-      const linkBox = (await links.boundingBox())!;
-      expect(linkBox.y).toBeGreaterThanOrEqual(tags.y + tags.height);
-    }
+    await expectLinksBelowEveryCard(page);
   });
 }
+
+test.describe("retina screenshots", () => {
+  test.use({ deviceScaleFactor: 2 });
+
+  for (const width of [400, 768, 1199]) {
+    test(`project screenshots are sharp enough for the card at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto("/");
+      const image = page.locator(".project").first().locator("img");
+      await image.scrollIntoViewIfNeeded();
+      await expect.poll(() => image.evaluate((img) => (img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth > 0)).toBe(true);
+      const { natural, rendered } = await image.evaluate((img) => ({
+        natural: (img as HTMLImageElement).naturalWidth,
+        rendered: img.getBoundingClientRect().width,
+      }));
+      // The largest supplied export is 1080px wide; below that, it should cover 2x.
+      expect(natural).toBeGreaterThanOrEqual(Math.min(1080, Math.floor(rendered * 2)));
+    });
+  }
+});
 
 test.describe("contact form validation", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
@@ -261,7 +327,7 @@ for (const width of [400, 768, 1440]) {
   });
 }
 
-for (const width of [400, 768, 1440]) {
+for (const width of [375, 400, 768, 1000, 1199, 1200, 1440]) {
   test(`no horizontal overflow or undersized text at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
