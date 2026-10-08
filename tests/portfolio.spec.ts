@@ -361,7 +361,7 @@ for (const width of [375, 400, 768, 1000, 1199, 1200, 1440]) {
   test(`no horizontal overflow or undersized text at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
-    // Show the inline errors too, so their deliberate 12px size is the only exception.
+    // Show the inline errors too: they also meet the 16px floor (QA, October 8).
     await contactForm(page).send.click();
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
     const small = await page.evaluate(() => {
@@ -369,13 +369,13 @@ for (const width of [375, 400, 768, 1000, 1199, 1200, 1440]) {
       for (const element of document.querySelectorAll<HTMLElement>("body *")) {
         const ownText = [...element.childNodes].some((node) => node.nodeType === Node.TEXT_NODE && node.textContent?.trim());
         if (!ownText || !element.getClientRects().length || element.closest(".sr-only")) continue;
-        if (parseFloat(getComputedStyle(element).fontSize) < 16 && !element.classList.contains("field-error")) found.push(element.textContent ?? "");
+        if (parseFloat(getComputedStyle(element).fontSize) < 16) found.push(element.textContent ?? "");
       }
       return found;
     });
     expect(small).toEqual([]);
     const errorSize = await page.locator("#contact-name-error").evaluate((element) => getComputedStyle(element).fontSize);
-    expect(errorSize).toBe("12px");
+    expect(errorSize).toBe("16px");
     for (const control of await page.locator("a:visible, button:visible").all()) {
       const box = (await control.boundingBox())!;
       expect(box.height, await control.textContent() ?? "").toBeGreaterThanOrEqual(24);

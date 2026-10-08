@@ -56,7 +56,7 @@ function ProjectImage({ number, title }: { number: number; title: string }) {
 }
 
 function Rings({ className }: { className: string }) {
-  return <img className={`rings ${className}`} src="/images/pattern-rings.svg" alt="" width={530} height={129} />;
+  return <span className={`rings ${className}`} aria-hidden="true" />;
 }
 /* eslint-enable @next/next/no-img-element */
 
