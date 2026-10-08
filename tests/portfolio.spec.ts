@@ -171,8 +171,9 @@ test.describe("retina screenshots", () => {
       const image = page.locator(".project").first().locator("img");
       await image.scrollIntoViewIfNeeded();
       await expect.poll(() => image.evaluate((img) => (img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth > 0)).toBe(true);
+      // naturalWidth is density-corrected for srcset candidates, so read the chosen file's real width.
       const { natural, rendered } = await image.evaluate((img) => ({
-        natural: (img as HTMLImageElement).naturalWidth,
+        natural: (img as HTMLImageElement).currentSrc.includes("-large.webp") ? 1080 : 686,
         rendered: img.getBoundingClientRect().width,
       }));
       // The largest supplied export is 1080px wide; below that, it should cover 2x.
