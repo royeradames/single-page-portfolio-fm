@@ -94,7 +94,9 @@ button, input, textarea { font: inherit; color: inherit; }
 /* Hero */
 .hero { position: relative; }
 .hero-photo { display: block; width: 174px; margin-inline: auto; }
-.hero-photo img { width: 100%; height: auto; }
+/* The box follows each frame's photo shape, not the file that has loaded: widening swaps the source,
+   and until the new photo arrives the old one would otherwise stretch past the hero over the skills. */
+.hero-photo img { width: 100%; height: auto; aspect-ratio: 174 / 383; object-fit: cover; }
 .hero-rings { left: -358px; top: 124px; }
 .hero-circle { right: calc(-64.5px - var(--gutter)); top: 254px; }
 .hero-copy { position: relative; display: flex; flex-direction: column; align-items: center; margin-top: 2.5rem; text-align: center; }
@@ -204,6 +206,7 @@ button, input, textarea { font: inherit; color: inherit; }
 
   .hero { min-height: 600px; }
   .hero-photo { position: absolute; top: 0; right: calc(-1 * var(--gutter)); width: 323px; margin: 0; }
+  .hero-photo img { aspect-ratio: 323 / 600; }
   .hero-rings { left: -297px; top: 86px; }
   .hero-circle { top: 471px; }
   .hero-copy { align-items: flex-start; margin-top: 0; padding-top: 9.4375rem; text-align: left; }
@@ -242,6 +245,7 @@ button, input, textarea { font: inherit; color: inherit; }
 
   .hero { min-height: 720px; }
   .hero-photo { right: 0; width: 445px; }
+  .hero-photo img { aspect-ratio: 445 / 720; }
   .hero-rings { left: -265px; top: 133px; }
   .hero-circle { right: 380.5px; top: 521px; }
   .hero-copy { padding-top: 12.375rem; }
