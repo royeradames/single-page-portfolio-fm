@@ -69,3 +69,29 @@ test("empty-submit errors keep at least 4px from every content neighbour", async
     expect(clashes, `at ${width}px`).toEqual([]);
   }
 });
+
+// October 11 audit: an overlap from 1200 px after the empty submit. Widening the page swaps the photo source,
+// and until the new photo arrives the old one keeps its own shape: the phone photo stretched to 445 x 980 px
+// and covered the "JavaScript" skill. The photo's box must follow the frame's shape, not whichever file has loaded.
+for (const [from, to] of [[400, 768], [400, 1200], [400, 1360], [768, 1200]] as const) {
+  test(`the hero photo keeps its frame while the ${to}px photo loads after widening from ${from}px`, async ({ page }) => {
+    let release = () => {};
+    const held = new Promise<void>((resolve) => (release = resolve));
+    await page.setViewportSize({ width: from, height: 800 });
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+    await page.route(/image-profile-(tablet|desktop)\.webp/, async (route) => {
+      await held;
+      await route.continue();
+    });
+    await page.setViewportSize({ width: to, height: 800 });
+    const box = await page.evaluate(() => {
+      const photo = document.querySelector(".hero-photo img")!.getBoundingClientRect();
+      const hero = document.querySelector(".hero")!.getBoundingClientRect();
+      return { photoBottom: Math.round(photo.bottom), heroBottom: Math.round(hero.bottom), ratio: photo.height / photo.width };
+    });
+    release();
+    expect(box.photoBottom, `photo bottom vs hero bottom at ${to}px`).toBeLessThanOrEqual(box.heroBottom);
+    expect(box.ratio).toBeCloseTo(to >= 1200 ? 720 / 445 : 600 / 323, 2);
+  });
+}
