@@ -13,13 +13,16 @@ const skills = [
   { name: "Sass", years: 3 },
 ] as const;
 
+// The design's sample projects are Frontend Mentor challenges, so "View
+// project" opens the challenge each thumbnail shows.
+const challenge = "https://www.frontendmentor.io/challenges/";
 const projects = [
-  { number: 1, title: "Design portfolio", tags: ["HTML", "CSS"] },
-  { number: 2, title: "E-learning landing page", tags: ["HTML", "CSS"] },
-  { number: 3, title: "Todo web app", tags: ["HTML", "CSS", "JavaScript"] },
-  { number: 4, title: "Entertainment web app", tags: ["HTML", "CSS", "JavaScript"] },
-  { number: 5, title: "Memory game", tags: ["HTML", "CSS", "JavaScript"] },
-  { number: 6, title: "Art gallery showcase", tags: ["HTML", "CSS", "JavaScript"] },
+  { number: 1, title: "Design portfolio", tags: ["HTML", "CSS"], href: challenge + "singlepage-design-portfolio-2MMhyhfKVo" },
+  { number: 2, title: "E-learning landing page", tags: ["HTML", "CSS"], href: challenge + "skilled-elearning-landing-page-S1ObDrZ8q" },
+  { number: 3, title: "Todo web app", tags: ["HTML", "CSS", "JavaScript"], href: challenge + "todo-app-Su1_KokOW" },
+  { number: 4, title: "Entertainment web app", tags: ["HTML", "CSS", "JavaScript"], href: challenge + "entertainment-web-app-J-UhgAW1X" },
+  { number: 5, title: "Memory game", tags: ["HTML", "CSS", "JavaScript"], href: challenge + "memory-game-vse4WFPvM" },
+  { number: 6, title: "Art gallery showcase", tags: ["HTML", "CSS", "JavaScript"], href: challenge + "art-gallery-website-yVdrZlxyA" },
 ] as const;
 
 // The supplied images are already exported at 2x for each frame, so they are served as-is.
@@ -123,8 +126,8 @@ export default function Home() {
                     {/* The accessible names start with the visible text and add the project. */}
                     <a
                       className="text-button"
-                      href={`/images/thumbnail-project-${project.number}-large.webp`}
-                      aria-label={`View project: ${project.title}`}
+                      href={project.href}
+                      aria-label={`View project: ${project.title} (Frontend Mentor challenge)`}
                     >
                       View project
                     </a>
