@@ -56,7 +56,7 @@ I check the contact form on submit, then re-check fields as they are corrected. 
 ### Continued development
 
 - Replace the sample project destinations if I add real projects. "View project" currently opens the supplied preview image, and "View code" opens a GitHub repository search.
-- Decide whether to use my own details for the brief's bonus. I currently keep Adam Keyes, the sample developer. This is an owner decision, so the audit scores the bonus as manual.
+- Decide whether to use my own details for the brief's bonus. I currently keep Adam Keyes, the sample developer.
 
 ## Run it locally
 
@@ -71,7 +71,7 @@ npm run build
 npm test           # Playwright against the production build on port 4413
 ```
 
-Run `npm run build` before `npm test`. The tests start the production server.
+Run `npm run build` before `npm test`. The tests start the production server and use the installed Google Chrome (`channel: "chrome"`), so install Chrome first.
 
 I keep the contact form as a demo. It sends and stores nothing, and its confirmation says so. Without JavaScript, the browser checks required fields and email format, then returns to the demo notice without sending field values.
 
