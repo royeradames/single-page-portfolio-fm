@@ -1,20 +1,66 @@
-# Single-page developer portfolio
+# Frontend Mentor - Single-page developer portfolio solution
 
-Royer Adames' build of the Frontend Mentor [Single-page developer portfolio](https://www.frontendmentor.io/challenges) challenge. The page presents the challenge's sample developer, Adam Keyes. It is not Royer's own portfolio.
+This is a solution to the [Single-page developer portfolio challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/singlepage-developer-portfolio-bBVj2ZPi-x). I built a responsive page for the sample developer, Adam Keyes, with skills, project previews and a demo contact form.
 
-## What it does
+## Table of contents
 
-- Header, hero with art-directed profile photo and decorative rings, skills, projects and a contact section, matched to the 375, 768 and 1440 Figma frames.
-- On desktop pointers, "View project" and "View code" appear over each screenshot on hover and on keyboard focus. On tablet, phone and touch screens they are always visible.
-- The contact form uses TanStack Form with a Zod schema. It checks on submit, then re-checks each field as it is corrected. Errors show the designed red underline, icon and message, are linked with `aria-describedby`, and focus moves to the first invalid field.
-- The form is a demo: it sends and stores nothing, and its confirmation says so. Without JavaScript, the browser's own checks run and the form shows the same notice without sending any field values.
-- Both "Contact me" links jump to the contact section.
+- [Overview](#overview)
+  - [The challenge](#the-challenge)
+  - [Screenshot](#screenshot)
+  - [Links](#links)
+- [My process](#my-process)
+  - [Built with](#built-with)
+  - [What I learned](#what-i-learned)
+  - [Continued development](#continued-development)
+- [Run it locally](#run-it-locally)
+- [Author](#author)
 
-## Stack
+## Overview
 
-Next.js 16.3.6, React 19.2.8, Tailwind 4.2.1, TypeScript 5.9.3, TanStack Form 1.33.5, Zod 4.4.3 and Playwright 1.58.2. Space Grotesk is self-hosted.
+### The challenge
 
-## Scripts
+Users should be able to:
+
+- View the layout on mobile, tablet and desktop screens.
+- See hover and focus states for interactive elements.
+- Reach "View project" and "View code" links with a pointer or keyboard.
+- Jump to the contact section using either "Contact me" link.
+- Fill in the contact form and see errors for missing fields or an invalid email address.
+
+### Screenshot
+
+![Single-page developer portfolio at 1440 px](./docs/screenshot.jpg)
+
+### Links
+
+- Solution URL: [My Frontend Mentor solution](https://www.frontendmentor.io/solutions/developer-portfolio-with-nextjs-typescript-and-tailwind-hjM5OLwy4Q)
+- Live Site URL: [Single-page developer portfolio](https://single-page-portfolio-fm.royeradames.com)
+
+## My process
+
+### Built with
+
+- Next.js 16 and React 19
+- TypeScript
+- Tailwind CSS 4 and custom CSS with Grid, Flexbox and media queries
+- TanStack Form and Zod for contact form validation
+- Playwright for browser tests
+- Self-hosted Space Grotesk
+
+### What I learned
+
+I learned that project links shown on desktop hover must also appear on keyboard focus. I use `:focus-within` alongside `:hover` to reveal the screenshot overlay. I limit that overlay to desktop screens with a fine pointer and hover support. On smaller screens and touch devices, I keep the links visible below each project.
+
+I check the contact form on submit, then re-check fields as they are corrected. I use TanStack Form with a Zod schema for this. I link each error to its field with `aria-describedby` and move focus to the first invalid field, so the visitor can find what needs fixing.
+
+### Continued development
+
+- Replace the sample project destinations if I add real projects. "View project" currently opens the supplied preview image, and "View code" opens a GitHub repository search.
+- Decide whether to use my own details for the brief's bonus. I currently keep Adam Keyes, the sample developer. This is an owner decision, so the audit scores the bonus as manual.
+
+## Run it locally
+
+Use Node.js 22.13.0 or later.
 
 ```sh
 npm install
@@ -25,4 +71,13 @@ npm run build
 npm test           # Playwright against the production build on port 4413
 ```
 
-Design files from Frontend Mentor are not committed.
+Run `npm run build` before `npm test`. The tests start the production server.
+
+I keep the contact form as a demo. It sends and stores nothing, and its confirmation says so. Without JavaScript, the browser checks required fields and email format, then returns to the demo notice without sending field values.
+
+I follow the 375, 768 and 1440 px Figma frames, but keep text at least 16 px. The form's error messages are 16 px instead of the design's 12 px. Design files from Frontend Mentor are not committed.
+
+## Author
+
+- Website - [Royer Adames](https://royeradames.com)
+- Frontend Mentor - [@royeradames](https://www.frontendmentor.io/profile/royeradames)
