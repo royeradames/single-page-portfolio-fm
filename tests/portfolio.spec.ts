@@ -132,8 +132,15 @@ test.describe("desktop project links", () => {
     const hrefs = await page.locator(".project").getByRole("link", { name: /^View project/ }).evaluateAll(
       (links) => links.map((link) => link.getAttribute("href")),
     );
-    expect(hrefs).toHaveLength(6);
-    for (const href of hrefs) expect(href).toMatch(/^https:\/\/www\.frontendmentor\.io\/challenges\/[a-z0-9-]+-[A-Za-z0-9_-]+$/);
+    const challenge = "https://www.frontendmentor.io/challenges/";
+    expect(hrefs).toEqual([
+      challenge + "singlepage-design-portfolio-2MMhyhfKVo",
+      challenge + "skilled-elearning-landing-page-S1ObDrZ8q",
+      challenge + "todo-app-Su1_KokOW",
+      challenge + "entertainment-web-app-J-UhgAW1X",
+      challenge + "memory-game-vse4WFPvM",
+      challenge + "art-gallery-website-yVdrZlxyA",
+    ]);
     await expect(card.getByRole("link", { name: "View code: Memory game (GitHub search)" })).toHaveAttribute(
       "href", "https://github.com/search?q=Memory%20game%20frontend%20mentor&type=repositories");
   });
