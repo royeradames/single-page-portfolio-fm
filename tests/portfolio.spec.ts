@@ -86,7 +86,7 @@ test.describe("desktop project links", () => {
     await page.goto("/");
     const card = page.locator(".project").first();
     const links = card.locator(".project-links");
-    const viewProject = card.getByRole("link", { name: "View project: Design portfolio" });
+    const viewProject = card.getByRole("link", { name: "View project: Design portfolio (Frontend Mentor challenge)" });
     const viewCode = card.getByRole("link", { name: "View code: Design portfolio (GitHub search)" });
     await card.scrollIntoViewIfNeeded();
     await expect(links).toHaveCSS("opacity", "0");
@@ -121,14 +121,19 @@ test.describe("desktop project links", () => {
     await expect(page.locator(".project").nth(1).locator(".project-links")).toHaveCSS("opacity", "1");
   });
 
-  test("lead to the project preview and a code search", async ({ page, request }) => {
+  test("lead to the project's Frontend Mentor challenge and a code search", async ({ page }) => {
+    // Frontend Mentor's report (October 13, 2026): "View project" opened the
+    // thumbnail image. Each project now opens the challenge it shows.
     await page.goto("/");
     const card = page.locator(".project").nth(4);
-    const projectHref = await card.getByRole("link", { name: "View project: Memory game" }).getAttribute("href");
-    expect(projectHref).toBe("/images/thumbnail-project-5-large.webp");
-    const response = await request.get(projectHref!);
-    expect(response.status()).toBe(200);
-    expect(response.headers()["content-type"]).toContain("image/webp");
+    await expect(
+      card.getByRole("link", { name: "View project: Memory game (Frontend Mentor challenge)" }),
+    ).toHaveAttribute("href", "https://www.frontendmentor.io/challenges/memory-game-vse4WFPvM");
+    const hrefs = await page.locator(".project").getByRole("link", { name: /^View project/ }).evaluateAll(
+      (links) => links.map((link) => link.getAttribute("href")),
+    );
+    expect(hrefs).toHaveLength(6);
+    for (const href of hrefs) expect(href).toMatch(/^https:\/\/www\.frontendmentor\.io\/challenges\/[a-z0-9-]+-[A-Za-z0-9_-]+$/);
     await expect(card.getByRole("link", { name: "View code: Memory game (GitHub search)" })).toHaveAttribute(
       "href", "https://github.com/search?q=Memory%20game%20frontend%20mentor&type=repositories");
   });
@@ -415,12 +420,12 @@ test.describe("without JavaScript", () => {
     await page.setViewportSize({ width: 400, height: 900 });
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    await expect(page.locator(".project").first().getByRole("link", { name: "View project: Design portfolio" })).toBeVisible();
+    await expect(page.locator(".project").first().getByRole("link", { name: "View project: Design portfolio (Frontend Mentor challenge)" })).toBeVisible();
 
     await page.setViewportSize({ width: 1440, height: 900 });
     const firstLinks = page.locator(".project").first().locator(".project-links");
     await expect(firstLinks).toHaveCSS("opacity", "0");
-    await page.locator(".project").first().getByRole("link", { name: "View project: Design portfolio" }).focus();
+    await page.locator(".project").first().getByRole("link", { name: "View project: Design portfolio (Frontend Mentor challenge)" }).focus();
     await expect(firstLinks).toHaveCSS("opacity", "1");
 
     const { name, email, message, send } = contactForm(page);
