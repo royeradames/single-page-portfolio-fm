@@ -4,7 +4,7 @@ import "./globals.css";
 import { siteName, siteUrl } from "./site";
 
 const spaceGrotesk = localFont({
-  src: "./fonts/SpaceGrotesk-VariableFont_wght.ttf",
+  src: "./fonts/SpaceGrotesk-VariableFont_wght.woff2",
   variable: "--font-space-grotesk",
   display: "swap",
   weight: "300 700",
